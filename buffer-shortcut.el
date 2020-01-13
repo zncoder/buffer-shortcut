@@ -41,7 +41,7 @@
 (defvar buffer-shortcut-not-found-hook nil)
 (defvar-local buffer-shortcut-id nil)
 
-(defun buffer-shortcut-id-suffix (&optional c)
+(defun buffer-shortcut-id-prefix (&optional c)
 	(setq c (or c buffer-shortcut-id))
 	(if c
 			(concat buffer-shortcut-delimiter (char-to-string c))
@@ -91,13 +91,19 @@
 			(error "shortcut:%s not found" c)))))
 
 (defun bs/display (sl)
-	(mapconcat
-	 (lambda (x)
-		 (let ((c (car x))
-					 (buf (cdr x)))
-			 (concat (char-to-string c) buffer-shortcut-delimiter (buffer-name buf))))
-	 sl
-	 " "))
+	(s-join
+	 " "
+	 (sort
+		(mapcar
+		 (lambda (x)
+			 (let* ((c (car x))
+						 (prefix (buffer-shortcut-id-prefix c))
+						 (name (buffer-name (cdr x))))
+				 (if (s-prefix? prefix name)
+						 name
+					 (concat prefix name))))
+		 sl)
+		'string<)))
 
 ;; save buffer-shortcut-id in desktop
 (customize-push-and-save 'desktop-locals-to-save '(buffer-shortcut-id))

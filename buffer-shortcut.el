@@ -41,9 +41,10 @@
 (defvar buffer-shortcut-not-found-hook nil)
 (defvar-local buffer-shortcut-id nil)
 
-(defun buffer-shortcut-id-suffix ()
-	(if buffer-shortcut-id
-			(concat buffer-shortcut-delimiter (char-to-string buffer-shortcut-id))
+(defun buffer-shortcut-id-suffix (&optional c)
+	(setq c (or c buffer-shortcut-id))
+	(if c
+			(concat buffer-shortcut-delimiter (char-to-string c))
 		""))
 
 (defun bs/list ()

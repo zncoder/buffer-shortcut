@@ -44,7 +44,7 @@
 (defun buffer-shortcut-id-prefix (&optional c)
 	(setq c (or c buffer-shortcut-id))
 	(if c
-			(concat buffer-shortcut-delimiter (char-to-string c))
+			(concat (char-to-string c) buffer-shortcut-delimiter)
 		""))
 
 (defun bs/list ()

@@ -65,10 +65,13 @@
 	 ((eq c 32)														;reset
 		(setq buffer-shortcut-id nil))
 	 ((and (<= ?a c) (<= c ?z))						;goto
-		(let* ((x (assq c sl)))
+		(let* ((x (cdr (assq c sl))))
 			(if x
-					(let ((b (current-buffer)))
-						(switch-to-buffer (cdr x))
+					(let ((b (current-buffer))
+								(w (get-buffer-window x)))
+						(if w
+								(select-window w)
+							(switch-to-buffer x))
 						(run-hook-with-args 'buffer-shortcut-after-goto-hook b))
 				(bs/not-found c))))
 	 ((and (<= ?A c) (<= c ?Z))						;set
